@@ -60,7 +60,6 @@ console.log(curriedJoin(1, 2, 3)); // '1_2_3'
 console.log(curriedJoin(1)(2, 3)); // '1_2_3'
 console.log(curriedJoin(1, 2)(3)); // '1_2_3'
 
-*/
 
 // 2. Infinite Currying -- recursive approach
 
@@ -74,3 +73,5 @@ function sum(a) {
 console.log(sum(1)(2)(3)(4)(5)());
 console.log(sum(1)(2)(3)(4)());
 console.log(sum(1)(2)(3)());
+
+*/

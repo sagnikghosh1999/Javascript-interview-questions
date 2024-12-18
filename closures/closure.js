@@ -247,7 +247,7 @@ hello(1, 2);
 const obj = {
   message: "Hello from the object",
 };
-
+ 
 const greet = once(function () {
   console.log(this.message);
 });
