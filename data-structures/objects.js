@@ -1,4 +1,4 @@
-console.log("---------------<Objects>--------------");
+console.log("<---------------<Objects>-------------->");
 
 const facebookUserData = {
   // Basic Information
@@ -267,3 +267,20 @@ for (const [key, val] of Object.entries(facebookUserData)) {
 }
 
 */
+
+const mySym1 = Symbol("key1");
+
+const myKey1 = 100;
+
+// Adding a symbol property to the person object
+//It can only be done by [], because the dot notation only works with string keys.
+person[mySym1] = "value1"; // This line adds a new property to the 'person' object using a Symbol as the key.
+console.log(person);
+delete person[mySym1]; // This line deletes the property with the Symbol key from the 'person' object.
+console.log(person);
+delete mySym1; // This line does not delete the Symbol itself, only the property with that Symbol key. only works with object keys.
+console.log(mySym1);
+
+person[myKey1] = "value2"; // This line adds a new property to the 'person' object using a number as the key but the value of 'myKey1' variable is covert to string.
+
+console.log(person);
