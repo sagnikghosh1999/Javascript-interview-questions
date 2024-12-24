@@ -821,3 +821,506 @@ child.greet(); // "Hello from Child"
 In this example, the `greet` method in the `Child` prototype overrides the `greet` method in the `Parent` prototype. When `greet` is called on an instance of `Child`, the overridden method in the `Child` prototype is executed.
 
 Overriding methods allows subclasses to provide specific implementations while still inheriting properties and methods from the parent class.
+
+---
+
+## Object Manipulation
+
+### Q: How do you merge two objects in JavaScript?
+
+**A:** You can merge two objects in JavaScript using the following methods:
+
+1. **Using `Object.assign()` Method:**
+
+   ```javascript
+   const obj1 = { a: 1, b: 2 };
+   const obj2 = { b: 3, c: 4 };
+   const merged = Object.assign({}, obj1, obj2);
+   console.log(merged); // { a: 1, b: 3, c: 4 }
+   ```
+
+2. **Using Spread Operator (`...`):**
+
+   ```javascript
+   const obj1 = { a: 1, b: 2 };
+   const obj2 = { b: 3, c: 4 };
+   const merged = { ...obj1, ...obj2 };
+   console.log(merged); // { a: 1, b: 3, c: 4 }
+   ```
+
+Both methods create a new object by copying properties from the source objects. If there are properties with the same name, the value from the last object will overwrite the previous ones.
+
+---
+
+### Q: What is the difference between `Object.keys()`, `Object.values()`, and `Object.entries()`?
+
+**A:** The main differences between `Object.keys()`, `Object.values()`, and `Object.entries()` are:
+
+1. **`Object.keys()`**:
+
+   - Returns an array of the object's own enumerable property names (keys).
+   - Example:
+     ```javascript
+     const obj = { a: 1, b: 2, c: 3 };
+     console.log(Object.keys(obj)); // ["a", "b", "c"]
+     ```
+
+2. **`Object.values()`**:
+
+   - Returns an array of the object's own enumerable property values.
+   - Example:
+     ```javascript
+     const obj = { a: 1, b: 2, c: 3 };
+     console.log(Object.values(obj)); // [1, 2, 3]
+     ```
+
+3. **`Object.entries()`**:
+   - Returns an array of the object's own enumerable property `[key, value]` pairs.
+   - Example:
+     ```javascript
+     const obj = { a: 1, b: 2, c: 3 };
+     console.log(Object.entries(obj)); // [["a", 1], ["b", 2], ["c", 3]]
+     ```
+
+In summary, `Object.keys()` returns the property names, `Object.values()` returns the property values, and `Object.entries()` returns both the property names and values as `[key, value]` pairs.
+
+---
+
+### Q: How can you convert an object to an array in JavaScript?
+
+**A:** You can convert an object to an array in JavaScript using the following methods:
+
+1. **Using `Object.keys()` Method:**
+
+   ```javascript
+   const obj = { a: 1, b: 2, c: 3 };
+   const keysArray = Object.keys(obj);
+   console.log(keysArray); // ["a", "b", "c"]
+   ```
+
+2. **Using `Object.values()` Method:**
+
+   ```javascript
+   const obj = { a: 1, b: 2, c: 3 };
+   const valuesArray = Object.values(obj);
+   console.log(valuesArray); // [1, 2, 3]
+   ```
+
+3. **Using `Object.entries()` Method:**
+
+   ```javascript
+   const obj = { a: 1, b: 2, c: 3 };
+   const entriesArray = Object.entries(obj);
+   console.log(entriesArray); // [["a", 1], ["b", 2], ["c", 3]]
+   ```
+
+Each method converts the object into an array in different ways, depending on whether you need the keys, values, or both key-value pairs.
+
+---
+
+### Q: How do you freeze an object in JavaScript? What does it prevent?
+
+**A:** You can freeze an object in JavaScript using the `Object.freeze()` method. Freezing an object prevents new properties from being added to it, existing properties from being removed, and existing properties from being changed (i.e., it makes the object immutable).
+
+Example:
+
+```javascript
+const obj = { key1: "value1" };
+Object.freeze(obj);
+
+obj.key1 = "newValue"; // This will not change the value
+obj.key2 = "value2"; // This will not add a new property
+
+console.log(obj); // { key1: "value1" }
+```
+
+In this example, `Object.freeze(obj)` makes the `obj` object immutable. Any attempts to modify the object will have no effect.
+
+Freezing an object is useful when you want to ensure that the object remains constant and its properties cannot be altered.
+
+---
+
+### Q: What is the purpose of `Object.seal()` and how is it different from `Object.freeze()`?
+
+**A:** The `Object.seal()` method is used to seal an object, preventing new properties from being added to it and marking all existing properties as non-configurable. However, unlike `Object.freeze()`, it does not prevent the modification of existing property values.
+
+Example:
+
+```javascript
+const obj = { key1: "value1" };
+Object.seal(obj);
+
+obj.key1 = "newValue"; // This will change the value
+obj.key2 = "value2"; // This will not add a new property
+
+console.log(obj); // { key1: "newValue" }
+```
+
+In this example, `Object.seal(obj)` allows the modification of existing property values but prevents the addition of new properties.
+
+**Differences between `Object.seal()` and `Object.freeze()`:**
+
+1. **Property Addition:**
+
+   - `Object.seal()`: Prevents new properties from being added.
+   - `Object.freeze()`: Prevents new properties from being added.
+
+2. **Property Deletion:**
+
+   - `Object.seal()`: Prevents existing properties from being deleted.
+   - `Object.freeze()`: Prevents existing properties from being deleted.
+
+3. **Property Modification:**
+   - `Object.seal()`: Allows modification of existing property values.
+   - `Object.freeze()`: Prevents modification of existing property values.
+
+In summary, `Object.seal()` allows changes to existing property values but prevents adding or removing properties, while `Object.freeze()` makes the object completely immutable.
+
+---
+
+### Q: How do you make a property non-enumerable?
+
+**A:** You can make a property non-enumerable using the `Object.defineProperty()` method. This method allows you to define or modify a property on an object and specify its attributes, including `enumerable`.
+
+Example:
+
+```javascript
+const obj = { key1: "value1" };
+Object.defineProperty(obj, "key2", {
+  value: "value2",
+  enumerable: false,
+});
+
+console.log(obj.key2); // "value2"
+console.log(Object.keys(obj)); // ["key1"]
+```
+
+In this example, `key2` is defined as a non-enumerable property. As a result, it does not appear in the array returned by `Object.keys()`, but it can still be accessed directly.
+
+Making a property non-enumerable is useful when you want to hide it from enumeration methods like `for...in` and `Object.keys()`, while still allowing direct access to the property.
+
+---
+
+### Q: How do you delete a property from an object?
+
+**A:** You can delete a property from an object using the `delete` operator. This operator removes the specified property from the object.
+
+Example:
+
+```javascript
+const obj = { key1: "value1", key2: "value2" };
+delete obj.key1;
+console.log(obj); // { key2: "value2" }
+```
+
+In this example, the `delete` operator removes the `key1` property from the `obj` object. After the deletion, `obj` only contains the `key2` property.
+
+The `delete` operator is useful when you need to remove properties from an object dynamically.
+
+---
+
+### Q: How do you define getters and setters in an object?
+
+**A:** You can define getters and setters in an object using the `get` and `set` keywords within an object literal or by using `Object.defineProperty()`.
+
+1. **Using Object Literal Syntax:**
+
+   ```javascript
+   const obj = {
+     _key: "value",
+     get key() {
+       return this._key;
+     },
+     set key(value) {
+       this._key = value;
+     },
+   };
+
+   console.log(obj.key); // "value"
+   obj.key = "newValue";
+   console.log(obj.key); // "newValue"
+   ```
+
+2. **Using `Object.defineProperty()`:**
+
+   ```javascript
+   const obj = { _key: "value" };
+   Object.defineProperty(obj, "key", {
+     get() {
+       return this._key;
+     },
+     set(value) {
+       this._key = value;
+     },
+   });
+
+   console.log(obj.key); // "value"
+   obj.key = "newValue";
+   console.log(obj.key); // "newValue"
+   ```
+
+In both examples, the getter method allows you to access the property value, and the setter method allows you to modify the property value. The underscore `_` before `key` is a common convention to indicate a private property.
+
+---
+
+## Object Context and Methods
+
+### Q: What is the `this` keyword in the context of an object?
+
+**A:** The `this` keyword in the context of an object refers to the object itself. It is used to access the properties and methods of the object within its own methods.
+
+Example:
+
+```javascript
+const obj = {
+  key1: "value1",
+  key2: "value2",
+  showKeys() {
+    console.log(this.key1, this.key2);
+  },
+};
+
+obj.showKeys(); // "value1 value2"
+```
+
+In this example, `this.key1` and `this.key2` refer to the properties `key1` and `key2` of the `obj` object. The `this` keyword allows the `showKeys` method to access and use the object's properties.
+
+The value of `this` is determined by how a function is called. In the context of an object method, `this` refers to the object that the method is called on.
+
+---
+
+### Q: How does the value of `this` change based on how a function is called?
+
+**A:** The value of `this` in JavaScript depends on the context in which a function is called. Here are some common scenarios:
+
+1. **Global Context:**
+
+   - In the global context, `this` refers to the global object (`window` in browsers, `global` in Node.js).
+
+   ```javascript
+   console.log(this); // In a browser, this will log the window object
+   ```
+
+2. **Object Method:**
+
+   - When a function is called as a method of an object, `this` refers to the object.
+
+   ```javascript
+   const obj = {
+     key: "value",
+     showKey() {
+       console.log(this.key);
+     },
+   };
+   obj.showKey(); // "value"
+   ```
+
+3. **Constructor Function:**
+
+   - When a function is used as a constructor with the `new` keyword, `this` refers to the newly created instance.
+
+   ```javascript
+   function MyConstructor() {
+     this.key = "value";
+   }
+   const instance = new MyConstructor();
+   console.log(instance.key); // "value"
+   ```
+
+4. **Explicit Binding:**
+
+   - Using `call`, `apply`, or `bind` methods, you can explicitly set the value of `this`.
+
+   ```javascript
+   function showKey() {
+     console.log(this.key);
+   }
+   const obj = { key: "value" };
+   showKey.call(obj); // "value"
+   ```
+
+5. **Arrow Functions:**
+
+   - Arrow functions do not have their own `this` context. Instead, `this` is lexically inherited from the surrounding scope.
+
+   ```javascript
+   const obj = {
+     key: "value",
+     showKey: () => {
+       console.log(this.key);
+     },
+   };
+   obj.showKey(); // undefined (inherited from global scope)
+   ```
+
+6. **Event Handlers:**
+   - In event handlers, `this` refers to the element that received the event.
+   ```javascript
+   document.getElementById("myButton").addEventListener("click", function () {
+     console.log(this); // The button element
+   });
+   ```
+
+Understanding how `this` behaves in different contexts is crucial for writing correct and predictable JavaScript code.
+
+---
+
+### Q: What is the purpose of `bind()`, `call()`, and `apply()`? Provide examples.
+
+**A:** The `bind()`, `call()`, and `apply()` methods are used to set the value of `this` in a function and to invoke functions with a specific `this` value and arguments.
+
+1. **`bind()` Method:**
+
+   - The `bind()` method creates a new function that, when called, has its `this` value set to the provided value. It does not immediately invoke the function.
+
+   Example:
+
+   ```javascript
+   const obj = { key: "value" };
+   function showKey() {
+     console.log(this.key);
+   }
+   const boundShowKey = showKey.bind(obj);
+   boundShowKey(); // "value"
+   ```
+
+2. **`call()` Method:**
+
+   - The `call()` method invokes a function with a specified `this` value and arguments provided individually.
+
+   Example:
+
+   ```javascript
+   const obj = { key: "value" };
+   function showKey(arg1, arg2) {
+     console.log(this.key, arg1, arg2);
+   }
+   showKey.call(obj, "arg1", "arg2"); // "value arg1 arg2"
+   ```
+
+3. **`apply()` Method:**
+
+   - The `apply()` method invokes a function with a specified `this` value and arguments provided as an array.
+
+   Example:
+
+   ```javascript
+   const obj = { key: "value" };
+   function showKey(arg1, arg2) {
+     console.log(this.key, arg1, arg2);
+   }
+   showKey.apply(obj, ["arg1", "arg2"]); // "value arg1 arg2"
+   ```
+
+In summary, `bind()` is used to create a new function with a specific `this` value, while `call()` and `apply()` are used to invoke functions with a specific `this` value and arguments. The difference between `call()` and `apply()` is in how the arguments are passed: individually for `call()` and as an array for `apply()`.
+
+---
+
+### Q: How can you define a method inside an object?
+
+**A:** You can define a method inside an object using either the object literal syntax or the `Object.defineProperty()` method.
+
+1. **Using Object Literal Syntax:**
+
+   ```javascript
+   const obj = {
+     key: "value",
+     showKey() {
+       console.log(this.key);
+     },
+   };
+
+   obj.showKey(); // "value"
+   ```
+
+2. **Using `Object.defineProperty()`:**
+
+   ```javascript
+   const obj = { key: "value" };
+   Object.defineProperty(obj, "showKey", {
+     value: function () {
+       console.log(this.key);
+     },
+     writable: true,
+     enumerable: true,
+     configurable: true,
+   });
+
+   obj.showKey(); // "value"
+   ```
+
+In both examples, the `showKey` method is defined inside the `obj` object and can be called to access the object's properties using the `this` keyword.
+
+### Q: What happens if you return an object from a constructor function?
+
+**A:** If you return an object from a constructor function, that object will be returned instead of the newly created instance. This allows you to override the default behavior of the constructor function.
+
+Example:
+
+```javascript
+function MyConstructor() {
+  this.key = "value";
+  return { key: "new value" };
+}
+
+const instance = new MyConstructor();
+console.log(instance.key); // "new value"
+```
+
+In this example, the constructor function returns a new object with `key: "new value"`. As a result, the `instance` variable holds this returned object instead of the default instance created by the constructor function. If you return a non-object value (e.g., a primitive), it will be ignored, and the newly created instance will be returned.
+
+Example:
+
+```javascript
+function MyConstructor() {
+  this.key = "value";
+  return "ignored value";
+}
+
+const instance = new MyConstructor();
+console.log(instance.key); // "value"
+```
+
+In this example, the constructor function returns a string, which is ignored. The `instance` variable holds the newly created instance with `key: "value"`.
+
+### Q: How do arrow functions handle the `this` keyword differently than regular functions?
+
+**A:** Arrow functions handle the `this` keyword differently than regular functions in that they do not have their own `this` context. Instead, they lexically inherit `this` from the surrounding scope at the time they are defined.
+
+Example:
+
+```javascript
+const obj = {
+  key: "value",
+  regularFunction: function () {
+    console.log(this.key); // "value"
+  },
+  arrowFunction: () => {
+    console.log(this.key); // undefined
+  },
+};
+
+obj.regularFunction(); // "value"
+obj.arrowFunction(); // undefined
+```
+
+In this example, `regularFunction` has its own `this` context, which refers to the `obj` object. However, `arrowFunction` inherits `this` from the surrounding scope, which is the global scope in this case, resulting in `undefined`.
+
+Arrow functions are useful when you want to preserve the `this` context from the surrounding scope, such as in callbacks or event handlers.
+
+Example:
+
+```javascript
+function Timer() {
+  this.seconds = 0;
+  setInterval(() => {
+    this.seconds++;
+    console.log(this.seconds);
+  }, 1000);
+}
+
+const timer = new Timer();
+// Logs the incrementing seconds value every second
+```
+
+In this example, the arrow function inside `setInterval` inherits `this` from the `Timer` constructor function, allowing it to correctly reference `this.seconds`.

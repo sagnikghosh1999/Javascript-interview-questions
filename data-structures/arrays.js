@@ -364,3 +364,11 @@ console.log(groupedByAgePlayers);
 //Map Reduce filters
 <------------------------------------------------------------------------------->
 */
+
+//Grouping by type
+const groupedByTypePlayers = Object.groupBy(
+  playerData,
+  (player) => player.type
+);
+
+console.log(Object.keys(groupedByTypePlayers));

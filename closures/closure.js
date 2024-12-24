@@ -257,7 +257,6 @@ greet.call(obj);
 greet.call(obj);
 greet.call(obj);
 
-*/
 
 //10. Memoize Polyfill
 
@@ -286,3 +285,39 @@ console.timeEnd("First call");
 console.time("Second call");
 console.log(memoizedClumsyProduct(9475, 5456));
 console.timeEnd("Second call");
+
+
+// 11. Counter using closures -- 30 days of JS Leetcode
+const Counter = function (value) {
+  let _count = value; //private variable
+
+  const increment = function () {
+    _count += 1;
+    return _count;
+  };
+  
+  const decrement = function () {
+    _count -= 1;
+    return _count;
+  };
+  
+  const reset = function () {
+    _count = value;
+    return _count;
+  };
+  
+  return {
+    increment,
+    decrement,
+    reset,
+  };
+};
+
+const value = 5;
+const calls = ["increment", "reset", "decrement"];
+
+const counter = new Counter(value);
+
+const output = calls.map((call) => counter[call]());
+console.log(output);
+*/

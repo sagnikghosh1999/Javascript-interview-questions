@@ -266,7 +266,6 @@ for (const [key, val] of Object.entries(facebookUserData)) {
   console.log(key, ": ", val);
 }
 
-*/
 
 const mySym1 = Symbol("key1");
 
@@ -284,3 +283,143 @@ console.log(mySym1);
 person[myKey1] = "value2"; // This line adds a new property to the 'person' object using a number as the key but the value of 'myKey1' variable is covert to string.
 
 console.log(person);
+
+<----------------------------------------------------------------->
+Cloning of Objects 
+<----------------------------------------------------------------->
+
+const original = {
+  key1: "value1",
+  nestedObj: {
+    key2: "value2",
+  },
+};
+
+//Shallow copy using Object.assign
+// const shallowCopy = Object.assign({}, original);
+
+// shallow copy using spread operator
+// const shallowCopy = { ...original };
+
+// shallowCopy.nestedObj.key2 = "newValue";
+
+// console.log("original : ", original);
+// console.log("shallowCopy : ", shallowCopy);
+
+//Deep copy using JSON.parse(JSON.stringify())
+// const deepCopy = JSON.parse(JSON.stringify(original));
+
+// Deep copy using structured cloning
+const deepCopy = structuredClone(original);
+
+deepCopy.nestedObj.key2 = "newValue";
+
+console.log("original : ", original);
+console.log("deepCopy : ", deepCopy);
+
+<----------------------------------------------------------------->
+Cloning of Objects 
+<----------------------------------------------------------------->
+
+*/
+
+/**
+  <----------------------------------------------------------------->
+  Object Properties 
+  <-----------------------------------------------------------------> 
+
+Object.defineProperty(person, "fullName", {
+  value: "Sagnik Ghosh",
+  writable: false,
+  enumerable: true,
+  configurable: true,
+});
+
+Object.defineProperty(person, "age", {
+  value: 28,
+  writable: false,
+  enumerable: true,
+  configurable: false,
+});
+
+Object.defineProperties(person, {
+  fullName: {
+    value: "Sagnik Ghosh",
+    writable: false, // This line will make the 'fullName' property non-writable.
+    enumerable: true, // This line will make the 'fullName' property enumerable.
+    configurable: true, // This line will make the 'fullName' property configurable.
+  },
+  age: {
+    value: 28, // This line will set the value of the 'age' property to 28.
+    writable: false,  // This line will make the 'age' property non-writable.
+    enumerable: false, // This line will make the 'age' property non-enumerable.
+    configurable: false,  // This line will make the 'age' property non-configurable.
+  },
+});
+
+console.log("Fullname :", person.fullName);
+person.fullName = "Sagnik Ghosh1"; // This line will not change the value of 'fullName' property because it is defined as non-writable.
+console.log("Fullname :", person.fullName);
+// delete person.fullName; // This line will delete the 'fullName' property from the 'person' object.
+// console.log("Fullname :", person.fullName);// This line will return 'undefined' because the 'fullName' property has been deleted.
+
+console.log("Age :", person.age); // This line will return 28
+delete person.age; // This line will not delete the 'age' property because it is defined as non-configurable.
+console.log("Age :", person.age); // This line will return 28 because the 'age' property has not been deleted.
+
+Object.freeze(person);
+
+delete person.fullName; // This line will not delete the 'fullName' property because the 'person' object is frozen.
+console.log("Fullname :", person.fullName); // This line will return 'Sagnik Ghosh' because the 'fullName' property has not been deleted.
+
+
+// Object.freeze(person);
+
+// person.firstName = "Sagnik1";
+console.log("First Name :", person.firstName); // This line will return 'Sagnik' because the 'person' object is frozen.
+
+Object.seal(person);
+person.firstName = "Sagnik2";
+console.log("First Name :", person.firstName); // This line will return 'Sagnik2' because the 'person' object is sealed.
+
+person.favoriteQuote =
+  "The only way to do great work is to love what you do. - Steve Jobs"; // This line will not add the 'favoriteQuote' property because the 'person' object is sealed.
+console.log("Favorite Quote :", person.favoriteQuote); // This line will return 'undefined' because the 'favoriteQuote' property has not been added.
+<----------------------------------------------------------------->
+Object Properties
+<----------------------------------------------------------------->
+
+<----------------------------------------------------------------->
+Object Methods 
+<-----------------------------------------------------------------> 
+
+const obj = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+
+console.log(obj.toString()); // "[object Object]"
+console.log(JSON.stringify(obj).toString()); // "{"a":1,"b":2,"c":3}"
+
+const str = JSON.stringify(person, ["firstName", "lastName"], 2); // This line will convert the 'person' object to a JSON string with only the 'firstName' and 'lastName' properties.
+
+console.log(str); 
+
+// Object.freeze(person);
+// Object.seal(person);
+
+// console.log(Object.getOwnPropertyNames(person));
+// console.log(Object.keys(obj));
+// console.log(Object.values(obj));
+// console.log(Object.entries(obj));
+// console.log(Object.getOwnPropertyDescriptors(person));
+// console.log(Object.getOwnPropertySymbols(person));
+// console.log(Object.isFrozen(person));
+// console.log(Object.isSealed(person));
+// console.log(Object.isExtensible(person));
+
+<----------------------------------------------------------------->
+Object Methods 
+<-----------------------------------------------------------------> 
+*/
