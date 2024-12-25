@@ -423,3 +423,24 @@ console.log(str);
 Object Methods 
 <-----------------------------------------------------------------> 
 */
+
+console.log(person);
+person.person = person; // circular reference
+console.log(person);
+
+// console.log(JSON.stringify(person)); //TypeError: Converting circular structure to JSON
+
+function getCircularReplacer() {
+  let seen = new Set(); // Keeps track of objects already visited
+  return function (key, value) {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return; // Skip circular references
+      }
+      seen.add(value); // Mark object as visited
+    }
+    return value; // Process the value as normal
+  };
+}
+
+console.log(JSON.stringify(person, getCircularReplacer()));

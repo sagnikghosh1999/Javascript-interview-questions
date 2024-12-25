@@ -1324,3 +1324,343 @@ const timer = new Timer();
 ```
 
 In this example, the arrow function inside `setInterval` inherits `this` from the `Timer` constructor function, allowing it to correctly reference `this.seconds`.
+
+---
+
+### Q: What is the difference between methods defined inside and outside the constructor function?
+
+**A:** The main differences between methods defined inside and outside the constructor function are:
+
+1. **Scope and Memory Usage:**
+
+- **Inside the Constructor:** Methods defined inside the constructor function are recreated for each instance of the object. This can lead to higher memory usage if many instances are created.
+
+  ```javascript
+  function MyConstructor() {
+    this.method = function () {
+      console.log("Method inside constructor");
+    };
+  }
+  const instance1 = new MyConstructor();
+  const instance2 = new MyConstructor();
+  console.log(instance1.method === instance2.method); // false
+  ```
+
+- **Outside the Constructor:** Methods defined on the prototype are shared among all instances of the object, leading to lower memory usage.
+  ```javascript
+  function MyConstructor() {}
+  MyConstructor.prototype.method = function () {
+    console.log("Method on prototype");
+  };
+  const instance1 = new MyConstructor();
+  const instance2 = new MyConstructor();
+  console.log(instance1.method === instance2.method); // true
+  ```
+
+2. **Inheritance:**
+
+- **Inside the Constructor:** Methods defined inside the constructor are not inherited by other objects created from the same constructor function.
+- **Outside the Constructor:** Methods defined on the prototype are inherited by all instances created from the constructor function.
+
+3. **Performance:**
+
+- **Inside the Constructor:** Defining methods inside the constructor can lead to slower performance due to the creation of new function objects for each instance.
+- **Outside the Constructor:** Defining methods on the prototype can lead to better performance as the method is created once and shared among all instances.
+
+In summary, defining methods on the prototype is generally preferred for better memory usage and performance, while defining methods inside the constructor can be useful for creating instance-specific behavior.
+
+---
+
+### Q: How do you use destructuring to extract properties from an object?
+
+**A:** Destructuring is a convenient way to extract properties from an object and assign them to variables. You can use the curly braces `{}` syntax to destructure an object.
+
+Example:
+
+```javascript
+const obj = { key1: "value1", key2: "value2" };
+const { key1, key2 } = obj;
+
+console.log(key1); // "value1"
+console.log(key2); // "value2"
+```
+
+In this example, the properties `key1` and `key2` are extracted from the `obj` object and assigned to variables with the same names.
+
+You can also assign properties to variables with different names:
+
+```javascript
+const obj = { key1: "value1", key2: "value2" };
+const { key1: newKey1, key2: newKey2 } = obj;
+
+console.log(newKey1); // "value1"
+console.log(newKey2); // "value2"
+```
+
+In this example, the properties `key1` and `key2` are extracted from the `obj` object and assigned to variables `newKey1` and `newKey2`.
+
+Destructuring can also be used with nested objects:
+
+```javascript
+const obj = { key1: "value1", nested: { key2: "value2" } };
+const {
+  key1,
+  nested: { key2 },
+} = obj;
+
+console.log(key1); // "value1"
+console.log(key2); // "value2"
+```
+
+In this example, the `key2` property is extracted from the nested `nested` object.
+
+Destructuring is a powerful feature that makes it easier to work with objects and extract properties in a concise and readable way.
+
+---
+
+### Q: What is method chaining? Provide an example.
+
+**A:** Method chaining is a technique in JavaScript where multiple methods are called on the same object consecutively. Each method returns the object itself, allowing the next method to be called on the same object.
+
+Example:
+
+```javascript
+class Calculator {
+  constructor(value = 0) {
+    this.value = value;
+  }
+
+  add(number) {
+    this.value += number;
+    return this;
+  }
+
+  subtract(number) {
+    this.value -= number;
+    return this;
+  }
+
+  multiply(number) {
+    this.value *= number;
+    return this;
+  }
+
+  divide(number) {
+    this.value /= number;
+    return this;
+  }
+
+  getResult() {
+    return this.value;
+  }
+}
+
+const result = new Calculator()
+  .add(10)
+  .subtract(2)
+  .multiply(3)
+  .divide(4)
+  .getResult();
+
+console.log(result); // 6
+```
+
+In this example, the `Calculator` class methods (`add`, `subtract`, `multiply`, `divide`) return `this`, allowing them to be chained together. The final result is obtained by calling `getResult()`. Method chaining improves code readability and conciseness.
+
+### Q: How can you create private properties or methods in an object?
+
+**A:** You can create private properties or methods in an object using closures or the `#` syntax for private fields (introduced in ES2022).
+
+1. **Using Closures:**
+
+```javascript
+function MyObject() {
+  let privateProperty = "private value";
+
+  this.publicMethod = function () {
+    console.log(privateProperty);
+  };
+}
+
+const obj = new MyObject();
+obj.publicMethod(); // "private value"
+console.log(obj.privateProperty); // undefined
+```
+
+In this example, `privateProperty` is not accessible from outside the `MyObject` function, making it private.
+
+2. **Using `#` Syntax for Private Fields:**
+
+```javascript
+class MyClass {
+  #privateField = "private value";
+
+  publicMethod() {
+    console.log(this.#privateField);
+  }
+}
+
+const obj = new MyClass();
+obj.publicMethod(); // "private value"
+console.log(obj.#privateField); // SyntaxError: Private field '#privateField' must be declared in an enclosing class
+```
+
+In this example, `#privateField` is a private field and cannot be accessed from outside the `MyClass` class.
+
+Both methods allow you to create private properties or methods that are not accessible from outside the object, ensuring encapsulation and data hiding.
+
+---
+
+## Advanced Topics
+
+### Q: What is an object literal, and how is it different from other object creation methods?
+
+**A:** An object literal is a way to create an object using a simple and concise syntax. It is defined by enclosing a comma-separated list of key-value pairs within curly braces `{}`.
+
+Example:
+
+```javascript
+const obj = {
+  key1: "value1",
+  key2: "value2",
+};
+```
+
+**Differences from Other Object Creation Methods:**
+
+1. **Object Literal vs. `new Object()`:**
+
+   - Object literal is more concise and readable.
+   - `new Object()` uses the `Object` constructor to create an object, which is less commonly used.
+
+   Example:
+
+   ```javascript
+   const obj1 = { key1: "value1" }; // Object literal
+   const obj2 = new Object();
+   obj2.key1 = "value1"; // Object constructor
+   ```
+
+2. **Object Literal vs. `Object.create()`:**
+
+   - Object literal creates an object with `Object.prototype` as its prototype.
+   - `Object.create()` allows you to create an object with a specified prototype.
+
+   Example:
+
+   ```javascript
+   const proto = { key1: "value1" };
+   const obj = Object.create(proto); // Object.create()
+   ```
+
+3. **Object Literal vs. Constructor Functions:**
+
+   - Object literal is used for creating single objects.
+   - Constructor functions are used for creating multiple instances with shared properties and methods.
+
+   Example:
+
+   ```javascript
+   function MyConstructor(key1) {
+     this.key1 = key1;
+   }
+   const obj = new MyConstructor("value1"); // Constructor function
+   ```
+
+4. **Object Literal vs. ES6 Classes:**
+
+   - Object literal is simpler for creating single objects.
+   - ES6 classes provide a more structured way to create objects with inheritance and methods.
+
+   Example:
+
+   ```javascript
+   class MyClass {
+     constructor(key1) {
+       this.key1 = key1;
+     }
+   }
+   const obj = new MyClass("value1"); // ES6 class
+   ```
+
+In summary, object literals are a straightforward and concise way to create objects, while other methods like `new Object()`, `Object.create()`, constructor functions, and ES6 classes offer more flexibility and structure for creating and managing objects.
+
+---
+
+### Q: What are computed property names in JavaScript objects? Provide an example.
+
+**A:** Computed property names in JavaScript objects allow you to dynamically define property names using expressions. This feature is useful when you need to create object properties based on variables or expressions.
+
+Example:
+
+```javascript
+const propName = "dynamicKey";
+const obj = {
+  [propName]: "value1",
+  ["key" + 2]: "value2",
+};
+
+console.log(obj); // { dynamicKey: "value1", key2: "value2" }
+```
+
+In this example, the property names `dynamicKey` and `key2` are computed dynamically using the values of `propName` and the expression `"key" + 2`, respectively. Computed property names provide flexibility in defining object properties based on runtime values.
+
+---
+
+### Q: How do you handle circular references in objects when serializing them to JSON?
+
+**A:** Circular references in objects can cause issues when serializing them to JSON using `JSON.stringify()`, as it will result in a `TypeError`. To handle circular references, you can use a custom replacer function or a library like `circular-json` or `flatted`.
+
+1. **Using a Custom Replacer Function:**
+
+```javascript
+function getCircularReplacer() {
+  const seen = new WeakSet();
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+}
+
+const obj = { key1: "value1" };
+obj.circular = obj; // Circular reference
+
+const jsonString = JSON.stringify(obj, getCircularReplacer());
+console.log(jsonString); // {"key1":"value1"}
+```
+
+In this example, the custom replacer function uses a `WeakSet` to keep track of seen objects and avoid circular references.
+
+2. **Using `circular-json` Library:**
+
+```javascript
+const CircularJSON = require("circular-json");
+
+const obj = { key1: "value1" };
+obj.circular = obj; // Circular reference
+
+const jsonString = CircularJSON.stringify(obj);
+console.log(jsonString); // {"key1":"value1","circular":"~"}
+```
+
+3. **Using `flatted` Library:**
+
+```javascript
+const { stringify, parse } = require("flatted");
+
+const obj = { key1: "value1" };
+obj.circular = obj; // Circular reference
+
+const jsonString = stringify(obj);
+console.log(jsonString); // {"key1":"value1","circular":"~"}
+
+const parsedObj = parse(jsonString);
+console.log(parsedObj); // { key1: 'value1', circular: [Circular] }
+```
+
+Using these methods, you can handle circular references in objects when serializing them to JSON, avoiding errors and ensuring proper serialization.
