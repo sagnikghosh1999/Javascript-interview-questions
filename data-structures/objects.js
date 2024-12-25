@@ -443,4 +443,4 @@ function getCircularReplacer() {
   };
 }
 
-console.log(JSON.stringify(person, getCircularReplacer()));
+console.log(JSON.stringify(person, getCircularReplacer())); //this will remove circular references from the object

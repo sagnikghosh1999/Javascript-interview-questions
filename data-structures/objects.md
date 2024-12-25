@@ -1664,3 +1664,312 @@ console.log(parsedObj); // { key1: 'value1', circular: [Circular] }
 ```
 
 Using these methods, you can handle circular references in objects when serializing them to JSON, avoiding errors and ensuring proper serialization.
+
+---
+
+### Q: What are the differences between `Object.preventExtensions()`, `Object.seal()`, and `Object.freeze()`?
+
+**A:** The main differences between `Object.preventExtensions()`, `Object.seal()`, and `Object.freeze()` are:
+
+1. **`Object.preventExtensions()`:**
+
+- Prevents new properties from being added to the object.
+- Existing properties can still be modified or deleted.
+- Example:
+  ```javascript
+  const obj = { key1: "value1" };
+  Object.preventExtensions(obj);
+  obj.key2 = "value2"; // This will not add a new property
+  console.log(obj); // { key1: "value1" }
+  ```
+
+2. **`Object.seal()`:**
+
+- Prevents new properties from being added to the object.
+- Marks all existing properties as non-configurable, meaning they cannot be deleted.
+- Existing properties can still be modified.
+- Example:
+  ```javascript
+  const obj = { key1: "value1" };
+  Object.seal(obj);
+  obj.key1 = "newValue"; // This will change the value
+  delete obj.key1; // This will not delete the property
+  console.log(obj); // { key1: "newValue" }
+  ```
+
+3. **`Object.freeze()`:**
+
+- Prevents new properties from being added to the object.
+- Marks all existing properties as non-configurable and non-writable, meaning they cannot be deleted or modified.
+- Example:
+  ```javascript
+  const obj = { key1: "value1" };
+  Object.freeze(obj);
+  obj.key1 = "newValue"; // This will not change the value
+  delete obj.key1; // This will not delete the property
+  console.log(obj); // { key1: "value1" }
+  ```
+
+In summary:
+
+- `Object.preventExtensions()` prevents adding new properties.
+- `Object.seal()` prevents adding or deleting properties but allows modification of existing properties.
+- `Object.freeze()` makes the object completely immutable, preventing any changes to its properties.
+
+---
+
+### Q: How do you dynamically add or modify properties in an object?
+
+**A:** You can dynamically add or modify properties in an object using dot notation or bracket notation.
+
+1. **Using Dot Notation:**
+
+```javascript
+const obj = { key1: "value1" };
+obj.key2 = "value2"; // Adding a new property
+obj.key1 = "newValue"; // Modifying an existing property
+console.log(obj); // { key1: "newValue", key2: "value2" }
+```
+
+2. **Using Bracket Notation:**
+
+```javascript
+const obj = { key1: "value1" };
+obj["key2"] = "value2"; // Adding a new property
+obj["key1"] = "newValue"; // Modifying an existing property
+console.log(obj); // { key1: "newValue", key2: "value2" }
+```
+
+Bracket notation is useful when the property name is dynamic or not a valid identifier (e.g., contains spaces or special characters).
+
+Example with dynamic property name:
+
+```javascript
+const obj = { key1: "value1" };
+const propName = "key2";
+obj[propName] = "value2"; // Adding a new property dynamically
+console.log(obj); // { key1: "value1", key2: "value2" }
+```
+
+In summary, both dot notation and bracket notation can be used to dynamically add or modify properties in an object, with bracket notation offering more flexibility for dynamic property names.
+
+---
+
+### Q: How can you implement immutability in objects?
+
+**A:** You can implement immutability in objects using the following methods:
+
+1. **Using `Object.freeze()`:**
+
+`Object.freeze()` makes an object immutable by preventing new properties from being added, existing properties from being removed, and existing properties from being changed.
+
+```javascript
+const obj = { key1: "value1" };
+Object.freeze(obj);
+obj.key1 = "newValue"; // This will not change the value
+obj.key2 = "value2"; // This will not add a new property
+console.log(obj); // { key1: "value1" }
+```
+
+2. **Using `Object.seal()` and `Object.defineProperty()`:**
+
+`Object.seal()` prevents new properties from being added and existing properties from being removed, while `Object.defineProperty()` can be used to make individual properties non-writable.
+
+```javascript
+const obj = { key1: "value1" };
+Object.seal(obj);
+Object.defineProperty(obj, "key1", { writable: false });
+obj.key1 = "newValue"; // This will not change the value
+obj.key2 = "value2"; // This will not add a new property
+console.log(obj); // { key1: "value1" }
+```
+
+3. **Using Immutable Libraries:**
+
+Libraries like `Immutable.js` provide data structures that are inherently immutable.
+
+```javascript
+const { Map } = require("immutable");
+const obj = Map({ key1: "value1" });
+const newObj = obj.set("key1", "newValue");
+console.log(obj.get("key1")); // "value1"
+console.log(newObj.get("key1")); // "newValue"
+```
+
+4. **Using Spread Operator and `Object.assign()` for Shallow Copies:**
+
+Create new objects with updated properties instead of modifying the original object.
+
+```javascript
+const obj = { key1: "value1" };
+const newObj = { ...obj, key1: "newValue" };
+console.log(obj); // { key1: "value1" }
+console.log(newObj); // { key1: "newValue" }
+```
+
+```javascript
+const obj = { key1: "value1" };
+const newObj = Object.assign({}, obj, { key1: "newValue" });
+console.log(obj); // { key1: "value1" }
+console.log(newObj); // { key1: "newValue" }
+```
+
+Implementing immutability helps ensure that objects remain unchanged, leading to more predictable and maintainable code.
+
+---
+
+### Q: What are Symbols in JavaScript, and how are they used in objects?
+
+**A:** Symbols are a unique and immutable primitive data type introduced in ES6. They are often used to create unique property keys for objects, ensuring that the keys do not conflict with other property keys.
+
+Example of creating and using a Symbol:
+
+```javascript
+const sym = Symbol("description");
+const obj = {
+  [sym]: "value",
+};
+
+console.log(obj[sym]); // "value"
+```
+
+In this example, `sym` is a Symbol, and it is used as a property key in the `obj` object. The property key is unique and does not conflict with any other property keys.
+
+Symbols are also used to define well-known symbols that represent internal behaviors of objects, such as `Symbol.iterator` for making objects iterable.
+
+Example of using a well-known symbol:
+
+```javascript
+const iterableObj = {
+  *[Symbol.iterator]() {
+    yield 1;
+    yield 2;
+    yield 3;
+  },
+};
+
+for (const value of iterableObj) {
+  console.log(value); // 1, 2, 3
+}
+```
+
+In this example, `Symbol.iterator` is used to define an iterator for the `iterableObj` object, allowing it to be used in a `for...of` loop.
+
+Symbols provide a way to create unique and non-enumerable property keys, making them useful for defining hidden or special properties in objects.
+
+---
+
+### Q: How do you ensure a property is only accessible internally in an object?
+
+**A:** You can ensure a property is only accessible internally in an object using closures or private fields (introduced in ES2022).
+
+1. **Using Closures:**
+
+```javascript
+function MyObject() {
+  let privateProperty = "private value";
+
+  this.publicMethod = function () {
+    console.log(privateProperty);
+  };
+}
+
+const obj = new MyObject();
+obj.publicMethod(); // "private value"
+console.log(obj.privateProperty); // undefined
+```
+
+In this example, `privateProperty` is not accessible from outside the `MyObject` function, making it private.
+
+2. **Using Private Fields:**
+
+```javascript
+class MyClass {
+  #privateField = "private value";
+
+  publicMethod() {
+    console.log(this.#privateField);
+  }
+}
+
+const obj = new MyClass();
+obj.publicMethod(); // "private value"
+console.log(obj.#privateField); // SyntaxError: Private field '#privateField' must be declared in an enclosing class
+```
+
+In this example, `#privateField` is a private field and cannot be accessed from outside the `MyClass` class.
+
+Both methods allow you to create private properties that are not accessible from outside the object, ensuring encapsulation and data hiding.
+
+---
+
+What are the differences between Object.fromEntries() and Object.entries()?
+
+### Q: What are the differences between `Object.fromEntries()` and `Object.entries()`?
+
+**A:** The main differences between `Object.fromEntries()` and `Object.entries()` are:
+
+1. **Functionality:**
+
+- `Object.entries()` converts an object into an array of key-value pairs.
+- `Object.fromEntries()` converts an array of key-value pairs back into an object.
+
+2. **Usage:**
+
+- `Object.entries()` is used to iterate over an object's properties or to convert an object into a format that can be easily manipulated as an array.
+- `Object.fromEntries()` is used to create an object from an array of key-value pairs, often after transforming the array.
+
+3. **Examples:**
+
+Using `Object.entries()`:
+
+```javascript
+const obj = { a: 1, b: 2, c: 3 };
+const entries = Object.entries(obj);
+console.log(entries); // [["a", 1], ["b", 2], ["c", 3]]
+```
+
+Using `Object.fromEntries()`:
+
+```javascript
+const entries = [
+  ["a", 1],
+  ["b", 2],
+  ["c", 3],
+];
+const obj = Object.fromEntries(entries);
+console.log(obj); // { a: 1, b: 2, c: 3 }
+```
+
+In summary, `Object.entries()` is used to convert an object into an array of key-value pairs, while `Object.fromEntries()` is used to convert an array of key-value pairs back into an object.
+
+---
+
+### Q: How do you use the `in` operator in JavaScript to check for properties?
+
+**A:** The `in` operator is used to check if a property exists in an object, including properties in the object's prototype chain. It returns `true` if the property is found and `false` otherwise.
+
+Example:
+
+```javascript
+const obj = { key1: "value1" };
+console.log("key1" in obj); // true
+console.log("key2" in obj); // false
+```
+
+In this example, `"key1" in obj` returns `true` because `key1` is a property of `obj`. `"key2" in obj` returns `false` because `key2` is not a property of `obj`.
+
+The `in` operator can also check for properties in the prototype chain:
+
+```javascript
+const proto = { key2: "value2" };
+const obj = Object.create(proto);
+obj.key1 = "value1";
+
+console.log("key1" in obj); // true
+console.log("key2" in obj); // true (inherited from prototype)
+```
+
+In this example, `key2` is found in the prototype of `obj`, so `"key2" in obj` returns `true`.
+
+The `in` operator is useful for checking the existence of properties, including inherited properties, in an object.
