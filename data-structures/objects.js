@@ -434,6 +434,7 @@ function getCircularReplacer() {
   let seen = new Set(); // Keeps track of objects already visited
   return function (key, value) {
     if (typeof value === "object" && value !== null) {
+      // Check if value is an object and not null
       if (seen.has(value)) {
         return; // Skip circular references
       }
