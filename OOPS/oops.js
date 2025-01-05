@@ -382,6 +382,7 @@ jay.init("Jay", 1997, "Computer Science");
 // jay.calcAge();
 
 //Lecture 13:
+/*
 class Account {
   constructor(owner, currency, pin) {
     this.owner = owner;
@@ -421,5 +422,42 @@ acc1.withdraw(140);
 acc1.requestLoan(1000);
 console.log(acc1.getBalance());
 
+*/
 //Lecture 14:
 // Encapsulation: Private class fields and methods
+
+class Account {
+  #movements = []; // Private field initialized with empty array
+  locale = navigator.language; // Private field initialized with navigator.language
+  #pin; // Private field uninitialized 
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+  getBalance() {
+    return this.#movements.reduce((acc, mov) => acc + mov, 0);
+  }
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.deposit(val);
+      console.log("Loan approved");
+      return this;
+    }
+  }
+  #approveLoan(val) {
+    return true;
+  }
+}
+
+const acc1 = new Account("Sagnik", "INR", 1111);
+console.log(acc1);
