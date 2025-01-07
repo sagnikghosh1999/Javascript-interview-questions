@@ -55,12 +55,6 @@ const country = "india";
 // 2. Fulfilled: Once the request is successful, the promise resolves with a value.
 // 3. Rejected: Once the request fails, the promise rejects with a reason.
 
-const getJson = (url, errorMsg) => {
-  return fetch(url).then((response) => {
-    if (!response.ok) throw new Error(`${errorMsg} ${response.status}`);
-    return response.json();
-  });
-};
 
 const getCountryData = function (country) {
   const url = `${baseUrl}name/${country}`;
@@ -166,7 +160,7 @@ const wait = function (seconds) {
 wait(2).then(() => {
   console.log("2 seconds later");
 });
-*/
+
 
 // const currentLocation = navigator.geolocation.getCurrentPosition(
 //   (res) => console.log(res),
@@ -200,3 +194,135 @@ function whereAmI() {
 }
 
 whereAmI();
+
+*/
+//ASYNC AWAIT :
+// const getJson = (url, errorMsg) => {
+//   return fetch(url).then((response) => {
+//     if (!response.ok) throw new Error(`${errorMsg} ${response.status}`);
+//     return response.json();
+//   });
+// };
+
+const getJson = async (url, errorMsg) => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${errorMsg} ${response.status}`);
+  return await response.json();
+};
+
+const getCountryData = async (country) => {
+  try {
+    const url = `${baseUrl}name/${country}`;
+    const data = await getJson(url, "Country not found");
+    return data[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// (async function () {
+//   console.log(await getCountryData("india"));
+// })();
+
+const getCountryDataByCode = async function (code) {
+  try {
+    const url = `${baseUrl}alpha/${code}`;
+    const data = await getJson(url, "Neighbour Country not found");
+    return data[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
+(async function () {
+  const data = await getCountryData("india");
+
+  console.log(
+    data?.borders.map(async (border) => await getCountryDataByCode(border))
+  );
+})();
+
+const getThreeCapitals = async function (country1, country2, country3) {
+  try {
+    // const [data1] = await getJson(
+    //   `${baseUrl}name/${country1}`,
+    //   "Country not found"
+    // );
+    // const [data2] = await getJson(
+    //   `${baseUrl}name/${country2}`,
+    //   "Country not found"
+    // );
+    // const [data3] = await getJson(
+    //   `${baseUrl}name/${country3}`,
+    //   "Country not found"
+    // );
+    //Promise.all combinator : short circuits if any rejection/ returns all the success data
+    const data = await Promise.all([
+      getJson(`${baseUrl}name/${country1}`, "Country not found"),
+      getJson(`${baseUrl}name/${country2}`, "Country not found"),
+      getJson(`${baseUrl}name/${country3}`, "Country not found"),
+    ]);
+
+    //it returns a array of objects containing status and value
+    // const data = await Promise.allSettled([
+    //   getJson(`${baseUrl}name/${country1}`, "Country not found"),
+    //   getJson(`${baseUrl}nae/${country2}`, "Country not found"),
+    //   getJson(`${baseUrl}name/${country3}`, "Country not found"),
+    // ]);
+
+    console.log(
+      // data1.capital[0],
+      // ", ",
+      // data2.capital[0],
+      // ", ",
+      // data3.capital[0]
+      data.map(
+        (d) =>
+          // if (d.status === "rejected") return d.reason;
+          // return d.value[0].capital[0];
+          d[0].capital[0]
+      )
+    );
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+getThreeCapitals("india", "portugal", "usa");
+
+const getRandomCapital = async function (country1, country2, country3) {
+  try {
+    // Promise.race -- returns as soon as the first promise settles/executes even if it fails
+    // const data = await Promise.race([
+    //   getJson(`${baseUrl}name/${country1}`, "Country not found"),
+    //   getJson(`${baseUrl}name/${country2}`, "Country not found"),
+    //   getJson(`${baseUrl}name/${country3}`, "Country not found"),
+    // ]);
+
+    // Promise.any -- returns as soon as the one promise succeeds
+    const data = await Promise.any([
+      getJson(`${baseUrl}name/${country1}`, "Country not found"),
+      getJson(`${baseUrl}name/${country2}`, "Country not found"),
+      getJson(`${baseUrl}name/${country3}`, "Country not found"),
+    ]);
+
+    console.log(data[0].capital[0]);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+// getRandomCapital("india", "portugal", "usa");
+
+const timeout = function (seconds) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject("Timed Out");
+    }, seconds * 1000);
+  });
+};
+
+// timeout(2)
+//   .then(() => {
+//     "Hello";
+//   })
+//   .catch((err) => console.log(err));
